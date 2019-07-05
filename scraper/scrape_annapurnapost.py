@@ -1,6 +1,5 @@
 import requests
 import json
-import csv
 import sys
 sys.path.insert(0,'../')
 from news.news_obj import News

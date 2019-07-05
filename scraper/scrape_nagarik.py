@@ -1,32 +1,52 @@
 import bs4 as bs
 import requests
-import csv
+import sys
+sys.path.insert(0,'../')
+from news.news_obj import News
+from database.dbase import Dbase
+
+url ="https://nagariknews.nagariknetwork.com"
+site = "nagarik"
 
 def scrape():
+    db = Dbase()
     #page = input('Page number each page contains 21 post')
-    page = 150
-    for page_number in range(0,int(page)): 
+    page = 10
+    for page_number in range(1,int(page)): 
         sauce = requests.get('https://nagariknews.nagariknetwork.com/category/21?page='+str(page_number))
         soup = bs.BeautifulSoup(sauce.text,'lxml')
         if page_number == 1:
             data = soup.find_all("div",class_="col-sm-3 part-ent")
             for d in data:
-                with open('nagarik_news.txt','a') as csv_file:
-                    title = d.find('a').text
-                    link = "https://nagariknews.nagariknetwork.com" +d.find('a')['href']
-                    print(title+'\n'+link)
-                    csv_writer = csv.writer(csv_file,delimiter=',')
-                    csv_writer.writerow([title,link,"https://nagariknews.nagariknetwork.com"])
+                title = d.find('a').text
+                link = url +d.find('a')['href']
+                print(title+'\n'+link)
+                a = ins(title,link,db)
+                if a==0:
+                    return
+                
         else:
+            print(page_number)
             posts = soup.find_all('div',class_="col-sm-9 detail-on")
             for data in posts:
-                with open('nagarik_news.txt','a') as csv_file:
-                    title = data.find('a').text
-                    #link = data.find('a')['href']
-                    link = "https://nagariknews.nagariknetwork.com" +data.find('a')['href']
-                    print(title+'\n'+link)
-                    csv_writer = csv.writer(csv_file,delimiter=',')
-                    csv_writer.writerow([title,link,"NagarikDaily"])
+                title = data.find('a').text
+                link = url+data.find('a')['href']
+                print(title+'\n'+link)
+                a = ins(title,link,db)
+                if a==0:
+                    return
+
+def ins(title,link,db,site="nagarik"):
+        news = News(title,link,site)
+        latest_news = db.get_latest_news(site)
+        for data in latest_news:
+            if data[0] == link:
+                print("returned")
+                return 0 
+        db.insert_news(news)
+
+
+        
 
 
 if __name__=="__main__":
