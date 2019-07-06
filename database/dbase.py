@@ -19,7 +19,7 @@ class Dbase:
         self._conn.execute(query)
 
     def get_latest_news(self,site):
-        query = "SELECT link FROM news WHERE site='{}' order by date ASC LIMIT 1".format(site)
+        query = "SELECT link FROM news WHERE site='{}' order by link DESC LIMIT 1".format(site)
         result = self._conn.execute(query)
         return result
 
