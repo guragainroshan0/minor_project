@@ -2,14 +2,15 @@ import bs4 as bs
 import requests
 import sys
 sys.path.insert(0,'../')
-from news.news_obj import News
 from database.dbase import Dbase
+from news.news_obj import News
 
 url ="https://nagariknews.nagariknetwork.com"
 site = "nagarik"
 
 def scrape():
     db = Dbase()
+    news_list = []
     #page = input('Page number each page contains 21 post')
     page = 10
     for page_number in range(1,int(page)): 
@@ -20,21 +21,27 @@ def scrape():
             for d in data:
                 title = d.find('a').text
                 link = url +d.find('a')['href']
-                print(title+'\n'+link)
                 a = ins(title,link,db)
                 if a==0:
-                    return
+                    return news_list
+                #print(len(news_list))
+                news_list.append(a)
+                #print(title+'\n'+link)
                 
         else:
-            print(page_number)
+            #print(page_number)
             posts = soup.find_all('div',class_="col-sm-9 detail-on")
             for data in posts:
                 title = data.find('a').text
                 link = url+data.find('a')['href']
-                print(title+'\n'+link)
+                
                 a = ins(title,link,db)
                 if a==0:
-                    return
+                    return news_list
+                #print(len(news_list))
+                news_list.append(a)
+                #print(title+'\n'+link)
+    return news_list
 
 def ins(title,link,db,site="nagarik"):
         news = News(title,link,site)
@@ -43,7 +50,7 @@ def ins(title,link,db,site="nagarik"):
             if data[0] == link:
                 print("returned")
                 return 0 
-        db.insert_news(news)
+        return news
 
 
         
