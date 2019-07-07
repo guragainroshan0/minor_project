@@ -1,26 +1,41 @@
-import bs4 as bs
+from bs4 import BeautifulSoup as soup
 import requests
-import csv
+import sys
+sys.path.insert(0,'../')
+from database.dbase import Dbase
+from news.news_obj import News
+
+site ="onlinekhabar"
 
 def scrape():
-    #page = input('Page number each page contains 21 post')
-    page = 150
-   
-    for page_number in range(0,int(page)): 
-        sauce = requests.get('https://www.onlinekhabar.com/content/news/page'+str(page_number))
-        soup = bs.BeautifulSoup(sauce.text,'lxml')
-        posts = soup.find_all("div",class_="relative list__post show_grid--view")
-        for post in posts:
-            wrapper = post.find_all("div",class_="item")
-            tag = wrapper[-1].find('a')
-            title = tag.text
-            link = tag['href']
-            print(title)
-            source = link.split('/')[2]
-            with open('online_khabar.txt','a') as csv_file:
-               csv_writer = csv.writer(csv_file,delimiter=',')
-               csv_writer.writerow([title,link,"OnlineKhabar"])
-        print(page_number)
+	for i in range(1,20):
+		my_url ="https://www.onlinekhabar.com/content/news/page"+str(i)
 
-if __name__=="__main__":
-        scrape()
+		r=requests.get(my_url)
+
+		page_soup= soup (r.text,"lxml")
+
+		containers= page_soup.findAll("div", {"class":"item__wrap"})
+
+		for data in containers: 
+			link=data.a['href']
+			title=data.a.text.replace('\n','')
+			title=' '.join(title.split(','))
+			db = Dbase()
+			a=insert(title, link , db)
+			print(title)
+			if a==0:
+				exit
+
+
+def insert(title, link , db):
+	news = News (title, link, site)
+	latest_news = db.get_latest_news(site)
+	if latest_news == link:
+		return 0
+	db.insert_news(news)
+
+	
+if __name__ =="__main__":
+	scrape()
+
