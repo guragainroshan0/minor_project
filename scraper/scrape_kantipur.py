@@ -8,9 +8,9 @@ sys.path.insert(0,'../')
 from database.dbase import Dbase	
 from news.news_obj import News	
 
- site = "kantipur"	
+site = "kantipur"	
 
- def scrape():	
+def scrape():	
         day = datetime.today()	
         for _ in range(20):         	
                 url = "https://www.kantipurdaily.com/news/"+str(day)[:10].replace('-','/')+"?json=true"	
@@ -34,5 +34,5 @@ from news.news_obj import News
                                         exit	
                         db.insert_news(a)	
 
- if __name__=="__main__":	
+if __name__=="__main__":	
         scrape() 
