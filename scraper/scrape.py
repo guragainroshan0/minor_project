@@ -1,6 +1,6 @@
-import scrape_kantipur
+#import scrape_kantipur
 import scrape_nagarik
-import scraper_onlinekhabar
+#import scrape_onlinekhabar
 import scrape_annapurnapost
 from multiprocessing import Process,current_process,pool
 import sys
@@ -25,7 +25,6 @@ print(news_list)
 for news in news_list:
     process = Process(target=insert_news,args=(news,))
     processes.append(process)
-
     process.start()
 
 

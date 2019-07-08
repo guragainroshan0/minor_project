@@ -6,7 +6,7 @@ from news.news_obj import News
 
 class Dbase:
     def __init__(self):
-        self._engine = create_engine("mysql+pymysql://shawn:password@localhost/satyata?host=localhost?port=3306")
+        self._engine = create_engine("mysql+pymysql://roshan:EnterPassword@localhost/satyata?host=localhost?port=3306")
         self._conn = self._engine.connect()
 #result = conn.execute("Insert into news values (2,'roshan','rosan','sadfsadf','2015-11-05 14:29:36')")
 

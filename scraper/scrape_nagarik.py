@@ -4,11 +4,12 @@ import sys
 sys.path.insert(0,'../')
 from database.dbase import Dbase
 from news.news_obj import News
-
+from time import time
 url ="https://nagariknews.nagariknetwork.com"
 site = "nagarik"
 
 def scrape():
+    t1 = time()
     db = Dbase()
     news_list = []
     #page = input('Page number each page contains 21 post')
@@ -23,6 +24,7 @@ def scrape():
                 link = url +d.find('a')['href']
                 a = ins(title,link,db)
                 if a==0:
+                    print(time()-t1)
                     return news_list
                 #print(len(news_list))
                 news_list.append(a)
@@ -37,10 +39,12 @@ def scrape():
                 
                 a = ins(title,link,db)
                 if a==0:
+                    print(time.now()-t1)
                     return news_list
                 #print(len(news_list))
                 news_list.append(a)
                 #print(title+'\n'+link)
+    print(time.now()-t1)
     return news_list
 
 def ins(title,link,db,site="nagarik"):

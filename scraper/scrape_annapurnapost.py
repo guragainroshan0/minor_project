@@ -4,11 +4,13 @@ import sys
 sys.path.insert(0,'../')
 from news.news_obj import News
 from database.dbase import Dbase
+from time import time
 
 url = "http://annapurnapost.com/news/"
 site="annapurnapost"
 
 def scrape():
+        t1 = time()
         news_list = []
         for i in range(0,5):
                 resp = requests.get("http://bg.annapurnapost.com/api/news/list?page="+str(i)+"&per_page="+str(30)+"&category_alias=politics&isCategoryPage=1")
@@ -22,7 +24,8 @@ def scrape():
                         for data in latest_news:
                                 #print(data[0],link)
                                 if data[0] == link:
-                                        print("returned")
+                                        print(time()-t1)
+                                        print("Annapurna post returned")
                                         return news_list
                         #print(len(news_list))
                         a = News(title,link,site)
