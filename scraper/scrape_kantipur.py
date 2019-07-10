@@ -11,8 +11,9 @@ from news.news_obj import News
 site = "kantipur"	
 
 def scrape():	
+        news_list= []
         day = datetime.today()	
-        for _ in range(20):         	
+        for _ in range(5):         	
                 url = "https://www.kantipurdaily.com/news/"+str(day)[:10].replace('-','/')+"?json=true"	
                 #print(url)	
                 day = day - timedelta(days=1)	
@@ -26,13 +27,16 @@ def scrape():
                         title=(data.text)	
                         title= ' '.join(title.split(','))	
                         db=Dbase()	
-                        a=News(title,link,site)	
                         latest_news = db.get_latest_news(site)	
+                        for data in latest_news:
+                                if data[0] == link:
+                                        print("Kantipur returned ")
+                                        return news_list
 		        #print(latest_news)	
-                        for data in latest_news:	
-                                if data[0] == link:	
-                                        exit	
-                        db.insert_news(a)	
+                        a=News(title,link,site)	
+                        print(a.title)
+                        news_list.append(a)	
+        return news_list
 
 if __name__=="__main__":	
         scrape() 
