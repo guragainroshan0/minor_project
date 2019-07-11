@@ -4,7 +4,11 @@ import scrape_onlinekhabar
 import scrape_annapurnapost
 from multiprocessing import Process,current_process,pool
 import sys
-sys.path.insert(0,'../')
+import os
+path = os.path.abspath(__file__).split('/')[:-1]
+path = '/'.join(path)+'/../'
+sys.path.insert(0,path)
+
 from database.dbase import Dbase
 from time import time
 

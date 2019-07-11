@@ -1,7 +1,10 @@
 import requests
 import json
 import sys
-sys.path.insert(0,'../')
+import os
+path = os.path.abspath(__file__).split('/')[:-1]
+path = '/'.join(path)+'/../'
+sys.path.insert(0,path)
 from news.news_obj import News
 from database.dbase import Dbase
 from time import time
@@ -12,6 +15,7 @@ site="annapurnapost"
 def scrape():
         news_list = []
         for i in range(0,5):
+
                 resp = requests.get("http://bg.annapurnapost.com/api/news/list?page="+str(i)+"&per_page="+str(30)+"&category_alias=politics&isCategoryPage=1")
                 p = json.loads(resp.text)
                 data = p["data"]

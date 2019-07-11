@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine
 from datetime import datetime
 import sys
-sys.path.insert(0,'../')
+import os
+path = os.path.abspath(__file__).split('/')[:-1]
+path = '/'.join(path)+'/../'
+sys.path.insert(0,path)
+
 from news.news_obj import News
 
 class Dbase:
@@ -18,8 +22,8 @@ class Dbase:
     def execute(self,query):
         self._conn.execute(query)
 
-    def get_latest_news(self,site):
-        query = "SELECT link FROM news WHERE site='{}' order by link DESC LIMIT 1".format(site)
+    def get_latest_news(self,site,limit=1):
+        query = "SELECT link,title,site FROM news WHERE site='{}' order by link DESC LIMIT {}".format(site,limit)
         result = self._conn.execute(query)
         return result
 
