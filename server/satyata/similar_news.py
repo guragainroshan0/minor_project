@@ -14,6 +14,7 @@ from nltk.corpus import stopwords
 print(os.path.dirname(__file__))
 from news.news_obj import News
 from database.dbase import Dbase
+from scraper import scrape
 
 
 def tokenstem(data):
@@ -28,12 +29,13 @@ def news(dt):
                 res.append(News(data[1],data[0],data[2]))
         return res
 
-def similar_news(text, threshold=12):
+def similar_news(text, threshold=8):
     embeddings = np + '/embeddings'
     wv = KeyedVectors.load(embeddings)
     similar =[]
+    scrape.scrape()
     dbase = Dbase()
-    news_data = news(dbase.get_latest_news('annapurnapost',10))+news(dbase.get_latest_news('nagarik',10))+news(dbase.get_latest_news('kantipur',10))+news(dbase.get_latest_news('onlinekhabar',10))
+    news_data = news(dbase.get_latest_news('annapurnapost',50))+news(dbase.get_latest_news('nagarik',50))+news(dbase.get_latest_news('kantipur',50))+news(dbase.get_latest_news('onlinekhabar',50))
     for data in news_data:
         distance = wv.wmdistance(tokenstem(text),tokenstem(str(data.title)))
         if distance<threshold:
