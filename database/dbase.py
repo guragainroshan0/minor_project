@@ -31,3 +31,4 @@ class Dbase:
         a = self._conn.execute("Select * from news")
         for data in a:
             print(data)
+

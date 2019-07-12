@@ -12,20 +12,26 @@ from time import time
 url ="https://nagariknews.nagariknetwork.com"
 site = "nagarik"
 
+
+def getid(data):
+        return int(data.split('/')[-2])
+
 def scrape():
     #t1 = time()
     db = Dbase()
     news_list = []
     #page = input('Page number each page contains 21 post')
-    page = 10
+    page = 15
     for page_number in range(1,int(page)): 
-        sauce = requests.get('https://nagariknews.nagariknetwork.com/category/21?page='+str(page_number))
+        urls ='https://nagariknews.nagariknetwork.com/category/21?page='+str(page_number)
+        sauce = requests.get(urls)
         soup = bs.BeautifulSoup(sauce.text,'lxml')
         if page_number == 1:
             data = soup.find_all("div",class_="col-sm-3 part-ent")
             for d in data:
                 title = d.find('a').text
                 link = url +d.find('a')['href']
+                print(link)
                 a = ins(title,link,db)
                 if a==0:
                     #print(time()-t1)
@@ -41,7 +47,7 @@ def scrape():
             for data in posts:
                 title = data.find('a').text
                 link = url+data.find('a')['href']
-                
+                print(link)
                 a = ins(title,link,db)
                 if a==0:
                     #print(time.now()-t1)
@@ -57,7 +63,8 @@ def ins(title,link,db,site="nagarik"):
         news = News(title,link,site)
         latest_news = db.get_latest_news(site)
         for data in latest_news:
-            if data[0] == link:
+            print(getid(data[0]))
+            if getid(data[0]) >= getid(link):
                 #print("Nagarik Returned")
                 return 0 
         return news

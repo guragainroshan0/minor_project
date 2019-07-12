@@ -10,7 +10,8 @@ from database.dbase import Dbase
 from news.news_obj import News
 
 site="onlinekhabar"
-
+def getid(data):
+        return int(data.split('/')[-1])
 def scrape():
 	news_list = []
 	for i in range(1,5):
@@ -22,7 +23,6 @@ def scrape():
 		page_soup= soup (r.text,"lxml")
 
 		containers= page_soup.findAll("div", {"class":"item__wrap"})
-
 		for data in containers: 
 			link=data.a['href']
 			title=data.a.text.replace('\n','')
@@ -31,11 +31,13 @@ def scrape():
 			latest_news = db.get_latest_news(site)
 			#print(latest_news)
 			for data in latest_news:
-				if data[0] == link:
+				if getid(data[0]) >= getid(link):
 					print("Online Khabar Returned")
 					return news_list
 			a= News(title, link, site)
-			news_list.append(a)
+			if a not in news_list:     
+				news_list.append(a)
+		
 	return news_list
 
 if __name__ == "__main__":

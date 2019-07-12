@@ -33,3 +33,5 @@ def scrape():
         process = Process(target=insert_news,args=(news,))
         processes.append(process)
         process.start()
+if __name__ == "__main__":
+        scrape()

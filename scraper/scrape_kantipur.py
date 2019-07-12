@@ -14,12 +14,14 @@ from news.news_obj import News
 
 site = "kantipur"	
 
+def getid(data):
+        return int(data.split('/')[-1].split('.')[0])
 def scrape():	
         news_list= []
-        day = datetime.today()	
-        for _ in range(5):         	
+        day = datetime.today()
+        for _ in range(15):         	
                 url = "https://www.kantipurdaily.com/news/"+str(day)[:10].replace('-','/')+"?json=true"	
-                #print(url)	
+                print(url)	
                 day = day - timedelta(days=1)	
                 r = requests.get(url)	
                 # print(r.text)	
@@ -33,13 +35,15 @@ def scrape():
                         db=Dbase()	
                         latest_news = db.get_latest_news(site)	
                         for data in latest_news:
-                                if data[0] == link:
+                                print(getid(data[0]),getid(link))
+                                if getid(data[0]) >= getid(link):
                                         print("Kantipur returned ")
                                         return news_list
 		        #print(latest_news)	
                         a=News(title,link,site)	
-                        print(a.title)
-                        news_list.append(a)	
+                        #print(a.title)
+                        if a not in news_list:     
+                                news_list.append(a)	
         return news_list
 
 if __name__=="__main__":	

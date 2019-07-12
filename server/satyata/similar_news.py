@@ -29,18 +29,18 @@ def news(dt):
                 res.append(News(data[1],data[0],data[2]))
         return res
 
-def similar_news(text, threshold=8):
+def similar_news(text, threshold=15):
     embeddings = np + '/embeddings'
     wv = KeyedVectors.load(embeddings)
     similar =[]
     scrape.scrape()
     dbase = Dbase()
-    news_data = news(dbase.get_latest_news('annapurnapost',50))+news(dbase.get_latest_news('nagarik',50))+news(dbase.get_latest_news('kantipur',50))+news(dbase.get_latest_news('onlinekhabar',50))
+    news_data = news(dbase.get_latest_news('annapurnapost',150))+news(dbase.get_latest_news('nagarik',150))+news(dbase.get_latest_news('kantipur',150))+news(dbase.get_latest_news('onlinekhabar',150))
     for data in news_data:
         distance = wv.wmdistance(tokenstem(text),tokenstem(str(data.title)))
         if distance<threshold:
             print(data,distance)
-            similar.append(data)
+            if data not in similar:
+                similar.append(data)
     return similar
 
-print(len(similar_news("प्रतिनिधिसभा बैठक सुरु भए लगत्तै विपक्षीको अवरोध (तस्बिर)")))

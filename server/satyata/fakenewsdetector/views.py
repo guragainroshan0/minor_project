@@ -9,20 +9,20 @@ import similar_news
 from news.news_obj import News
 import json
 # Create your views here.
-def index(request,news):
-
-    response = find_similar(news)
+def index(request,news,threshold):
+    response = find_similar(news,threshold)
     return HttpResponse(json.dumps(response))
 
 
-def find_similar(news):
+def find_similar(news,threshold):
     res = []
-    result = similar_news.similar_news(news)
+    result = similar_news.similar_news(news,threshold)
     for data in result:
-        print(data.title())
+        #print(data.title())
         response = {
             "title":data.title(),
             "link":data.link()
         }
-        res.append(response)
+        if response not in res:
+            res.append(response)
     return res

@@ -18,6 +18,9 @@ class News:
     def date(self):
         return self._date
 
+    def __eq__(self,other):
+        return self._link == other.link()
+
     def __repr__(self):
         return '{}:{}'.format(self._site , self._title)
 
