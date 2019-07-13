@@ -33,7 +33,7 @@ def scrape():
                 link = url +d.find('a')['href']
                 print(link)
                 a = ins(title,link,db)
-                if a==0:
+                if a.link()=='0':
                     #print(time()-t1)
                     print("Nagarik Returned")
                     return news_list
@@ -49,7 +49,7 @@ def scrape():
                 link = url+data.find('a')['href']
                 print(link)
                 a = ins(title,link,db)
-                if a==0:
+                if a.link()=='0':
                     #print(time.now()-t1)
                     print("Nagarik Returned")
                     return news_list
@@ -66,7 +66,7 @@ def ins(title,link,db,site="nagarik"):
             print(getid(data[0]))
             if getid(data[0]) >= getid(link):
                 #print("Nagarik Returned")
-                return 0 
+                return News('0','0','0') 
         return news
 
 

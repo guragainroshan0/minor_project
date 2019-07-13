@@ -23,7 +23,7 @@ class Dbase:
         self._conn.execute(query)
 
     def get_latest_news(self,site,limit=1):
-        query = "SELECT link,title,site FROM news WHERE site='{}' order by link DESC LIMIT {}".format(site,limit)
+        query = "SELECT link,title,site,date FROM news WHERE site='{}' order by link DESC LIMIT {}".format(site,limit)
         result = self._conn.execute(query)
         return result
 
@@ -31,4 +31,7 @@ class Dbase:
         a = self._conn.execute("Select * from news")
         for data in a:
             print(data)
+    
+    def get_date(self):
+        return self._conn.execute("select date from news order by date desc limit 1")
 

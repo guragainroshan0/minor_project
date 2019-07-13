@@ -22,7 +22,7 @@ class News:
         return self._link == other.link()
 
     def __repr__(self):
-        return '{}:{}'.format(self._site , self._title)
+        return '{}:{}:{}'.format(self._site[:5] , self._title ,self._date)
 
 
     

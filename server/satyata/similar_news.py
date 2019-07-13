@@ -1,6 +1,7 @@
 from gensim.models import KeyedVectors
 import sys
 import os
+import datetime
 
 path = os.path.abspath(__file__).split('/')[:-1]
 np = '/'.join(path)
@@ -26,21 +27,28 @@ def tokenstem(data):
 def news(dt):
         res = []
         for data in dt:
-                res.append(News(data[1],data[0],data[2]))
+                res.append(News(data[1],data[0],data[2],data[3]))
         return res
 
 def similar_news(text, threshold=15):
+    print(text)
     embeddings = np + '/embeddings'
     wv = KeyedVectors.load(embeddings)
-    similar =[]
-    scrape.scrape()
     dbase = Dbase()
+    date = dbase.get_date()
+    similar =[]
+    for d in date:
+        a  = d[0]
+    if a - datetime.datetime.now() > datetime.timedelta(0,0,0,0,5,0,0):
+        scrape.scrape()
     news_data = news(dbase.get_latest_news('annapurnapost',150))+news(dbase.get_latest_news('nagarik',150))+news(dbase.get_latest_news('kantipur',150))+news(dbase.get_latest_news('onlinekhabar',150))
     for data in news_data:
+        #distance = wv.wmdistance(text.split(' '),str(data.title).split(' '))
         distance = wv.wmdistance(tokenstem(text),tokenstem(str(data.title)))
         if distance<threshold:
-            print(data,distance)
             if data not in similar:
+                print(data,distance)
                 similar.append(data)
+
     return similar
 
