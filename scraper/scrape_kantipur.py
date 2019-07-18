@@ -16,11 +16,11 @@ site = "kantipur"
 
 def getid(data):
         return int(data.split('/')[-1].split('.')[0])
-def scrape():	
+def scrape(type):	
         news_list= []
         day = datetime.today()
         for _ in range(15):         	
-                url = "https://www.kantipurdaily.com/news/"+str(day)[:10].replace('-','/')+"?json=true"	
+                url = "https://www.kantipurdaily.com/"+type+"/"+str(day)[:10].replace('-','/')+"?json=true"	
                 print(url)	
                 day = day - timedelta(days=1)	
                 r = requests.get(url)	
@@ -47,4 +47,4 @@ def scrape():
         return news_list
 
 if __name__=="__main__":	
-        scrape() 
+        scrape(type) 

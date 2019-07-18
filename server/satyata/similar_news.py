@@ -32,6 +32,7 @@ def news(dt):
 
 def similar_news(text, threshold=15):
     print(text)
+    #threshold=3.5
     embeddings = np + '/embeddings'
     wv = KeyedVectors.load(embeddings)
     dbase = Dbase()
@@ -39,13 +40,15 @@ def similar_news(text, threshold=15):
     similar =[]
     for d in date:
         a  = d[0]
-    if a - datetime.datetime.now() > datetime.timedelta(0,0,0,0,5,0,0):
-        scrape.scrape()
-    news_data = news(dbase.get_latest_news('annapurnapost',150))+news(dbase.get_latest_news('nagarik',150))+news(dbase.get_latest_news('kantipur',150))+news(dbase.get_latest_news('onlinekhabar',150))
+    #if (a - datetime.datetime.now()) > datetime.timedelta(0,0,0,0,5,0,0):
+    #scrape.scrape()
+    num_of_news= 50
+    news_data = news(dbase.get_latest_news('annapurnapost',num_of_news))+news(dbase.get_latest_news('nagarik',num_of_news))+news(dbase.get_latest_news('kantipur',num_of_news))+news(dbase.get_latest_news('onlinekhabar',num_of_news))
     for data in news_data:
         #distance = wv.wmdistance(text.split(' '),str(data.title).split(' '))
         distance = wv.wmdistance(tokenstem(text),tokenstem(str(data.title)))
-        if distance<threshold:
+        #print(distance)
+        if distance<float(threshold):
             if data not in similar:
                 print(data,distance)
                 similar.append(data)

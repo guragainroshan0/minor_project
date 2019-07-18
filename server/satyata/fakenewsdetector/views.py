@@ -11,6 +11,8 @@ import json
 # Create your views here.
 def index(request,news,threshold):
     response = find_similar(news,threshold)
+    response = {"result":response,"news":news}
+    return render(request,'fakenewsdetector/a.html',response)
     return HttpResponse(json.dumps(response))
 
 
@@ -21,7 +23,9 @@ def find_similar(news,threshold):
         #print(data.title())
         response = {
             "title":data.title(),
-            "link":data.link()
+            "link":data.link(),
+            "site":data.site()
+            
         }
         if response not in res:
             res.append(response)

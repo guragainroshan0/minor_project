@@ -25,7 +25,8 @@ def scrape():
 
     news_list = news_list + scrape_nagarik.scrape()
     news_list = news_list + scrape_annapurnapost.scrape()
-    news_list = news_list + scrape_kantipur.scrape()
+    news_list = news_list + scrape_kantipur.scrape("news")
+    news_list = news_list + scrape_kantipur.scrape("national")
     news_list = news_list + scrape_onlinekhabar.scrape()
 
     news_list = news_list[::-1]
