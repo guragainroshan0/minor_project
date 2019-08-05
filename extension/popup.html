@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Satyata</title>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="popup.js""></script>
+    </head>
+    <body>
+        <script src="fbauth.js"></script>
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="fb_auth/sdk.js"></script>
+        <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
+        <fb:login-button 
+        scope="public_profile,email"
+        onlogin="checkLoginState();">
+      </fb:login-button>
+       
+        <!-- <h1 id="headi">Report a news</h1>
+        <input type="text" id="link" values="https://www......">
+        <input type="submit" id="report" value="Report Link"> -->
+
+    </body>
+</html>
+

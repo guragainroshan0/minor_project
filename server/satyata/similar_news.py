@@ -53,7 +53,7 @@ def similar_news(text, threshold=15):
                 similar.append(data)
 
 
-def simi_news(text, threshold=0.5,num_best=10):
+def simi_news(text, threshold=0.53,num=5):
     dbase = Dbase()
     date = dbase.get_date()
     embeddings = np + '/embeddings'
@@ -61,7 +61,7 @@ def simi_news(text, threshold=0.5,num_best=10):
     date = dbase.get_date()
     for d in date:
         a  = d[0]
-    if (a - datetime.datetime.now()) < datetime.timedelta(0,0,0,0,5,0,0):
+    if (a - datetime.datetime.now()) > datetime.timedelta(0,0,0,0,5,0,0):
         scrape.scrape()
 #     scrape.scrape()
     similar =[]
@@ -69,17 +69,20 @@ def simi_news(text, threshold=0.5,num_best=10):
     num_of_news= 50
     news_data = news(dbase.get_latest_news('nagarik',num_of_news))+news(dbase.get_latest_news('kantipur',num_of_news))+news(dbase.get_latest_news('onlinekhabar',num_of_news))+news(dbase.get_latest_news('annapurnapost',num_of_news))
     for data in news_data:
-        clean_data.append(tokenstem(data.title()))
+        if (datetime.datetime.now()-data.date()) < datetime.timedelta(4,0,0,0,0,0,0):
+                clean_data.append(tokenstem(data.title()))
     clean_news = tokenstem(text)
     #print(clean_data)
-    instance = WmdSimilarity(clean_data,wv,num_best=10)
+    instance = WmdSimilarity(clean_data,wv,num_best=num)
     result = instance[clean_news]  
     print(len(result)) 
     for offset,similarity in result:
+            print(news,news_data[offset],similarity)
             # print(result[i][1],news_data[i].title())
             # print(result[i][1])
             if similarity > threshold:
                 #print(result[i][1],news_data[i].title())
+                
                 similar.append(news_data[offset])
         #     print(result[i][1],clean_data[i],news_data[i].title())
     # print(len(news_data))
