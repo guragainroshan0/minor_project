@@ -14,18 +14,23 @@ site = "nagarik"
 
 
 def getid(data):
+        """Returns the id of latest news using url"""
         return int(data.split('/')[-2])
 
 def scrape():
-    #t1 = time()
+    """Scrapes the news"""
     db = Dbase()
     news_list = []
-    #page = input('Page number each page contains 21 post')
+    
+    #number of pages to be scraped when the system is run first time i.e database is empty
     page = 15
     for page_number in range(1,int(page)): 
         urls ='https://nagariknews.nagariknetwork.com/category/21?page='+str(page_number)
+        #send request
         sauce = requests.get(urls)
+        #get response
         soup = bs.BeautifulSoup(sauce.text,'lxml')
+        #HTML response id different if page ==1 and same for all other pages
         if page_number == 1:
             data = soup.find_all("div",class_="col-sm-3 part-ent")
             for d in data:
@@ -34,15 +39,12 @@ def scrape():
                 print(link)
                 a = ins(title,link,db)
                 if a.link()=='0':
-                    #print(time()-t1)
                     print("Nagarik Returned")
                     return news_list
-                #print(len(news_list))
                 news_list.append(a)
-                #print(title+'\n'+link)
+                
                 
         else:
-            #print(page_number)
             posts = soup.find_all('div',class_="col-sm-9 detail-on")
             for data in posts:
                 title = data.find('a').text
@@ -50,16 +52,13 @@ def scrape():
                 print(link)
                 a = ins(title,link,db)
                 if a.link()=='0':
-                    #print(time.now()-t1)
                     print("Nagarik Returned")
                     return news_list
-                #print(len(news_list))
                 news_list.append(a)
-                #print(title+'\n'+link)
-    #print(time.now()-t1)
     return news_list
 
 def ins(title,link,db,site="nagarik"):
+        """Return only the news not in database"""
         news = News(title,link,site)
         latest_news = db.get_latest_news(site)
         for data in latest_news:

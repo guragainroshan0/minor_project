@@ -15,8 +15,13 @@ from news.news_obj import News
 site = "kantipur"	
 
 def getid(data):
+
+        """Returns latest news using url"""
         return int(data.split('/')[-1].split('.')[0])
-def scrape(type):	
+
+def scrape(type):
+        
+        """Scrape news using the api """
         news_list= []
         day = datetime.today()
         for _ in range(15):         	
@@ -33,15 +38,20 @@ def scrape(type):
                         title=(data.text)	
                         title= ' '.join(title.split(','))	
                         db=Dbase()	
-                        latest_news = db.get_latest_news(site)	
+                        #get latest news
+                        latest_news = db.get_latest_news(site,type)	
                         for data in latest_news:
-                                print(getid(data[0]),getid(link))
-                                if getid(data[0]) >= getid(link):
-                                        print("Kantipur returned ")
-                                        return news_list
-		        #print(latest_news)	
+                                #find news of the given type
+                                if type in data[0]:
+                                        print(getid(data[0]),getid(link))
+                                        #check if the news is already scraped
+                                        if getid(data[0]) >= getid(link):
+                                                print("Kantipur returned ")
+                                                return news_list
+		        	
                         a=News(title,link,site)	
-                        #print(a.title)
+
+                        #prevents same news to be stored in list
                         if a not in news_list:     
                                 news_list.append(a)	
         return news_list

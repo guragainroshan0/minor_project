@@ -11,15 +11,17 @@ from news.news_obj import News
 
 site="onlinekhabar"
 def getid(data):
-        return int(data.split('/')[-1])
+
+	"""Return id of latest news using url"""
+	return int(data.split('/')[-1])
+
 def scrape():
+
+	"""Scrape news from website"""
 	news_list = []
 	for i in range(1,5):
-		
 		my_url ="https://www.onlinekhabar.com/content/news/page/"+str(i)
-
 		r=requests.get(my_url)
-
 		page_soup= soup (r.text,"lxml")
 
 		containers= page_soup.findAll("div", {"class":"item__wrap"})
@@ -29,8 +31,9 @@ def scrape():
 			title=' '.join(title.split(','))
 			db = Dbase()
 			latest_news = db.get_latest_news(site)
-			#print(latest_news)
+			
 			for data in latest_news:
+				#check if news is already in database
 				if getid(data[0]) >= getid(link):
 					print("Online Khabar Returned")
 					return news_list

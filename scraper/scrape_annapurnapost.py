@@ -13,12 +13,16 @@ url = "http://annapurnapost.com/news/"
 site="annapurnapost"
 
 def getid(data):
+
+        """Returns latest id of news scraped"""
         return int(data.split('/')[-1])
 
-def scrape():
+def scrape(type):
+        
+        """Scraped latest news"""
         news_list = []
         for i in range(0,5):
-                urls= "http://bg.annapurnapost.com/api/news/list?page="+str(i)+"&per_page="+str(60)+"&category_alias=politics&isCategoryPage=1"
+                urls= "http://bg.annapurnapost.com/api/news/list?page="+str(i)+"&per_page="+str(60)+"&category_alias="+type+"&isCategoryPage=1"
                 print(urls)
                 resp = requests.get(urls)
                 p = json.loads(resp.text)
@@ -41,4 +45,4 @@ def scrape():
         return news_list
                         
 if __name__=="__main__":
-        scrape()
+        scrape("politics")
