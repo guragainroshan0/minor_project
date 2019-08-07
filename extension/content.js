@@ -38,42 +38,23 @@ $(document).on('click','.this-is-my-image',function(){
 
     
 
+
+    /*
+    Send the title to eventpage
+    Event page returns the response from the server in json format
+    ContentScript  query for recognization
+    */
     chrome.runtime.sendMessage({
         contentScriptQuery:"querynews",
         news : title
     }, function(response)
     {
+        /* Response data is  result obtained from event page after querying server*/
         var responsedata = response.result;
     
         console.log(responsedata)
 
-    /*
-    
-        For sending webrequest ajax is used xhr is the instance
-    */
-  //  var xhr  = new XMLHttpRequest();
-    /*
-    Here "GET" is sending the get request
-    The url is the url of the server and title is the query parameter
-    */
-   // xhr.open("GET","http://localhost:8000/news/"+title);
-
-    /*
-    Ajax sends asynchronous request so in load the function gets executed
-    */
-    //xhr.onload = function(){
-        /*
-            response is the response from the server here the json data is sent
-        */
-        //var response = xhr.response;
-       // console.log(response);
-
-       // div.attr('src',"https://assets-cdn-npb.kantipurdaily.com/uploads/source/news/kantipur/2018/miscellaneous/supreme-court-29112018040924-1000x0.jpg");
-       /*
-            This is used to hide the image after it has been clicked
-            div is the instance of the image
-       */
-       //div.hide()
+   
 
         /*
             the json is parsed
@@ -82,13 +63,10 @@ $(document).on('click','.this-is-my-image',function(){
 
         /*
             The data are extracted from the response
-            color contains the color returned
             link is the links in the json data of the response
-            if statements checks if a particular source has the news if not it is not used
+            
         */
-        //var color = resp.color;
-        //alert(color);
-       // var link = resp.links;
+        
        var link = resp.result;
         var htmlText="";
 
@@ -97,19 +75,6 @@ $(document).on('click','.this-is-my-image',function(){
             htmlText+=getOption(link[i].link,link[i].title);
         }
 
-      
-      /*
-      If statements for the news in json if news in json then add the news in drop down list
-      */
-       // var htmlText = '<img src="https://www.freeiconspng.com/uploads/blue-button-icon-png-20.png" height="25px" width="25px" style="float:right;display:inline;margin-right:25px" onclick="myFunction('+title+')" class="dropbtn"><div id="'+title+'" class="dropdown-content">'
-       
-       
-    //    for(var i=0; i<link.length; i++){
-    //      var a = link[i];
-    //      htmlText+=getOption(a[1],a[0]+":- "+a[2]);
-    //     //htmlText+=ddown(link.ekantipur+"/"+title,"ekantipur");
-    // }
-     
 
         /*
             <select> tag returns the drop down menu and html text containst the options
@@ -117,13 +82,13 @@ $(document).on('click','.this-is-my-image',function(){
        if(link.length==0)
        {
 
-        div.attr('src',"https://img.icons8.com/dusk/64/000000/pi.png");
+        div.attr('src',"https://img.icons8.com/offices/72/high-risk.png");
         
        }
        else{
        
         div.attr('src',"https://i.imgur.com/eFy7r3z.png");
-        var finalHtml = "<select class='this-is-my-dropdown'><option value=''>News</option>"+htmlText+"</select>";
+        var finalHtml = "<select class='this-is-my-dropdown'><option value=# disabled>News</option>"+htmlText+"</select>";
        
        // var finalHtml = '<div class="dropdown"><div class="dropdown-content">'+htmlText+'</div></div>'
 

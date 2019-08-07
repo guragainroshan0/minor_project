@@ -1,13 +1,19 @@
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
 
+    /*check for request from content.js*/
     if(request.contentScriptQuery == "querynews")
     {
         let xhr = new XMLHttpRequest();
+
+        // encode uri component
         var news= encodeURIComponent(request.news)
-        var url = "http://3.81.160.151:8000/news/"+news;
+        var url = "http://127.0.0.1:8000/news/"+news;
+
+        //send xhr request
         xhr.open("GET",url);
         xhr.send()
     
+        //call back function
         xhr.onload = function(){
             var response = xhr.response;
             console.log(response);
@@ -23,6 +29,8 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
         chrome.pageAction.show(tabs[0].id);
     
     });
+
+    //this sends message to content.js to wait until response from query is received
     return true;
 
 });
